@@ -10,12 +10,7 @@ var client = new Twitter({
 
 var visitCount = 0;
 
-
-// client.get('search/tweets', {q: 'csc400Node'}, function(error, tweets, response){
-//    console.log(tweets);
-// });
 var app= express();
-// allTweets = [];
 
 app.get('/', function (req, res) {
     visitCount += 1;
@@ -27,24 +22,18 @@ app.get('/', function (req, res) {
             console.log(error);
         }
     });
+    var allTweets;
 
-    // client.get('statuses/user_timeline', {screen_name: 'csc400Node'}, function(error, tweets, response){
-    //    //console.log(tweets);
-    //    if (error) {
-    //        console.log(error);
-    //        console.log("There was an error");
-    //    } else {
-    //        console.log("success?");
-    //         allTweets[0] = 5;
-    //        //console.log(tweets);
-    //        console.log(" ");
-    //    }
-    // });
-    //
-    // console.log(allTweets + "alltweets");
-    // console.log("All Tweets");
-
-    res.render('index.ejs', { count: visitCount });
-})
+    client.get('statuses/user_timeline', {screen_name: 'csc400Node'}, function(error, tweets, response){
+       if (error) {
+           console.log(error);
+       } else {
+            allTweets = tweets[0].text;
+            created = tweets[0].created_at;
+           console.log(allTweets);
+           res.render('index.ejs', { count: visitCount , highScore: allTweets, dateOf: created});
+       }
+    });
+});
 
 app.listen(3000)
